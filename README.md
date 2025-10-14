@@ -1,5 +1,5 @@
-# Anderson-in-Krylov-space
-Julia code for calculating Lanczos coefficients for the Anderson model in Krylov space, as well as some functionality to construct zero modes
+# Integrals-of-Motion-in-Krylov-space
+Julia code for calculating Lanczos coefficients for the Anderson model in Krylov space, as well as some functionality to construct the integrals of motion, which are the zero modes of the Liouvillian
 
 Models.jl stores the Hamiltonians for the various anderson models
 Lanczos_functions.jl stores all other functions needed
