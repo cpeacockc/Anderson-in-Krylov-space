@@ -1,4 +1,4 @@
-using HDF5, LinearAlgebra, SparseArrays
+using LinearAlgebra, SparseArrays
 
 
 #Liouvillian function for sparse matrices
@@ -15,10 +15,6 @@ function L_n(O::Matrix,H::SparseMatrixCSC,n::Integer)
     prod = O*H
     prod += ((-1)^(n+1))*adjoint(prod)
     return -(prod)
-end
-#L_n function for ED method
-function L_n_ED(Op::Matrix,Vals::Vector)
-    return (Vals .- Vals') .* Op
 end
 
 #norm function for dense matrices
@@ -77,45 +73,6 @@ function Lanczos(Probe::AbstractMatrix, H::AbstractMatrix, Nsteps::Integer)
     return b
 end
 
-function Lanczos_ED(Probe::AbstractMatrix,H::AbstractMatrix,Nsteps::Integer)
-
-    H = Matrix(H)
-    vals,vecs=eigen(H)
-    Probe=vecs' * Matrix(Probe) * vecs
-
-
-    #Base vector
-    O = []
-
-    b = Float64[1]
-    #error_0=Float64[]
-    #error_1=Float64[]
-
-    #Define O0
-    Probe/=Op_Norm(Probe)
-    push!(O,Probe)
-
-    LO_0 = L_n_ED(O[1],vals)
-    #Define b1, b0 is set to 0
-    push!(b,Op_Norm(LO_0))
-    
-    #Define O1
-    push!(O,LO_0/b[2])
-
-
-    for n in ProgressBar(3:Nsteps)
-        A_n = L_n_ED(O[2],vals) - b[n-1]*O[1]
-        b_n = Op_Norm(A_n)
-        push!(b,b_n)
-        O[1]=O[2]
-        O[2] = (A_n/b_n)
-
-        #println("n=$n, b=$b_n")
-        #push!(error_1, Op_Inner(LO_0/b[2],O[2]))
-        #push!(error_0,Op_Inner(Probe,O[2]))
-    end
-    return b
-end
 
 #The following ZeroMode functions give the probability amplitudes of the zero modes in Krylov space
 function ZeroMode_from_b(b)
@@ -128,7 +85,7 @@ function ZeroMode_from_b(b)
         for i in 1:Int((n-1)/2)
             phi *=(b[2*i]/b[2*i+1]) 
         end
-        phi_n[n]=phi #n+1 because of 0 start
+        phi_n[n]=phi
     end
     return phi_n
 end
@@ -138,7 +95,7 @@ function ZeroMode_log_avg_from_b(b_tot)
 
     ZeroModes=zeros(length(ZeroMode_from_b(b_tot[:,1])),Nsamples)
 
-    for j in ProgressBar(1:Nsamples)
+    for j in 1:Nsamples
         ZeroModes[:,j]=ZeroMode_from_b(b_tot[:,j])
     end
 
@@ -146,13 +103,6 @@ function ZeroMode_log_avg_from_b(b_tot)
     ZeroMode_log_avgs=exp.(mean(log.(abs.(ZeroModes)),dims=2))
     return ZeroMode_log_avgs
 end
-L_matrix(b) = Tridiagonal(b,zeros(length(b)+1),b)
 
-function ZeroMode_from_diag(b)
-    L = L_matrix(b)
-    M=(transpose(L)*L) #We want to find the eigenvector of the square
-    vals,vecs=eigen(M)
-    vals_abs = abs.(vals)
-    min_i = argmin(vals_abs)
-    return eigvecs(M)[:,min_i]
-end
+#Construct Liouvillian in Krylov space
+L_matrix(b) = Tridiagonal(b,zeros(length(b)+1),b)
