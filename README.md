@@ -1,4 +1,4 @@
-# Integrals-of-Motion-in-Krylov-space
+# Localization in Krylov space
 
 Julia code for calculating Lanczos coefficients for the Anderson model in Krylov space, as well as some functionality to construct the integrals of motion, which are the zero modes of the Liouvillian
 
