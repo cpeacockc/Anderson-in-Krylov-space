@@ -24,7 +24,7 @@ d=3;N=5;t=1;W=30
 H = H_Anderson(d,N,t,w)
 ```
 
-### Now Create your probe operator (here a Z operator in the middle of the torus)
+### Create the probe operator (here a Z operator in the middle of the torus)
 ```julia
 site=Int(round(L/2)); Id = spdiagm(ones(L));
 Diag = zeros(L)
@@ -35,7 +35,7 @@ for j in 2:d
 end
 ```
 
-### We can now run the Lanczos algorithm to calculate the Lanczos coefficients for this H and Probe
+### Run the Lanczos algorithm to calculate the Lanczos coefficients for this H and Probe
 Storing the Hamiltonian as sparse and the probe as dense is generally recommended
 ```julia
 Nsteps=100
