@@ -13,9 +13,6 @@ Example code calculating coefficients in the Anderson model, running for a certa
 ### Zero-Mode_construct.jl 
 Example code of constructing zero-modes and plotting. Example plotting code is written for PyPlot.jl but is default commented out
 
-### Outs 
-Stores the output from Calculate as well as two files of sample data for the 3d Anderson model at W=4 and W=40'
-
 ## Quickstart Functions
 
 ### Create Anderson Hamiltonian of dimension d, lattice length N, disorder W, tunneling probability t
