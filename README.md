@@ -1,4 +1,4 @@
-# Localization in Krylov space
+# Anderson Localization in Krylov space
 Julia code for calculating Lanczos coefficients for the Anderson model in Krylov space, as well as some functionality to construct the integrals of motion, which are the zero modes of the Liouvillian. *Hamiltonians and operators are written in single particle basis*
 
 ### Models.jl 
